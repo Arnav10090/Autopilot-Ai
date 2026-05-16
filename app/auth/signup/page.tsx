@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/Badge';
 import { ThemeToggle } from '@/components/global/ThemeToggle';
 import { TermsContent } from '@/components/legal/TermsContent';
 import { PrivacyContent } from '@/components/legal/PrivacyContent';
+import { buildApiUrl } from '@/lib/api';
 
 function getPasswordStrength(password: string) {
   if (!password) return { strength: 0, label: 'No password', color: 'bg-neutral-300' };
@@ -81,7 +82,7 @@ export default function SignUpPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/register', {
+      const response = await fetch(buildApiUrl('/api/auth/register'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -269,7 +270,7 @@ export default function SignUpPage() {
                 variant="outline" 
                 disabled={isLoading}
                 onClick={() => {
-                  window.location.href = 'http://localhost:5000/api/auth/google';
+                  window.location.href = buildApiUrl('/api/auth/google');
                 }}
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -284,7 +285,7 @@ export default function SignUpPage() {
                 variant="outline" 
                 disabled={isLoading}
                 onClick={() => {
-                  window.location.href = 'http://localhost:5000/api/auth/github';
+                  window.location.href = buildApiUrl('/api/auth/github');
                 }}
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">

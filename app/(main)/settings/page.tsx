@@ -9,6 +9,7 @@ import { Toggle } from '@/components/ui/Toggle';
 import { Select } from '@/components/ui/Select';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { buildApiUrl } from '@/lib/api';
 
 function SettingsContent() {
   const [showPassword, setShowPassword] = useState(false);
@@ -48,7 +49,7 @@ function SettingsContent() {
   const handleSaveChanges = async () => {
     setIsSaving(true);
     try {
-      const res = await fetch(`http://localhost:5000/api/auth/profile/${user.id}`, {
+      const res = await fetch(buildApiUrl(`/api/auth/profile/${user.id}`), {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -88,7 +89,7 @@ function SettingsContent() {
 
     setPasswordStatus('saving');
     try {
-      const res = await fetch('http://localhost:5000/api/auth/password', {
+      const res = await fetch(buildApiUrl('/api/auth/password'), {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user_id: user.id, new_password: newPassword })
@@ -112,7 +113,7 @@ function SettingsContent() {
   const handleDeleteAccount = async () => {
     setIsDeleting(true);
     try {
-      const res = await fetch(`http://localhost:5000/api/auth/account/${user.id}`, {
+      const res = await fetch(buildApiUrl(`/api/auth/account/${user.id}`), {
         method: 'DELETE',
       });
 
@@ -143,7 +144,7 @@ function SettingsContent() {
       }
 
       // Fetch fresh data from API
-      fetch(`http://localhost:5000/api/auth/profile/${parsed.id}`)
+      fetch(buildApiUrl(`/api/auth/profile/${parsed.id}`))
         .then(res => res.json())
         .then(data => {
           if (data.error) {

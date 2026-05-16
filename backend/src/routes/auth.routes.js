@@ -1,6 +1,7 @@
 import express from "express";
 import { createUser, getUserByEmail, getUserById, updateUserPassword, deactivateUser } from "../db/user.repository.js";
 import bcrypt from "bcrypt";
+import { getPrimaryFrontendUrl } from "../utils/runtimeConfig.js";
 
 const router = express.Router();
 
@@ -218,15 +219,16 @@ router.get('/google',
 router.get('/google/callback',
   async (req, res, next) => {
     const passport = (await import('../config/passport.js')).default;
+    const frontendUrl = getPrimaryFrontendUrl();
     passport.authenticate('google', { 
-      failureRedirect: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/auth/signin?error=google_auth_failed`,
+      failureRedirect: `${frontendUrl}/auth/signin?error=google_auth_failed`,
       session: false 
     })(req, res, next);
   },
   (req, res) => {
     // Successful authentication
     const user = req.user;
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const frontendUrl = getPrimaryFrontendUrl();
     
     // Redirect to frontend with user data in URL params (for demo purposes)
     // In production, use secure tokens/sessions
@@ -252,15 +254,16 @@ router.get('/github',
 router.get('/github/callback',
   async (req, res, next) => {
     const passport = (await import('../config/passport.js')).default;
+    const frontendUrl = getPrimaryFrontendUrl();
     passport.authenticate('github', { 
-      failureRedirect: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/auth/signin?error=github_auth_failed`,
+      failureRedirect: `${frontendUrl}/auth/signin?error=github_auth_failed`,
       session: false 
     })(req, res, next);
   },
   (req, res) => {
     // Successful authentication
     const user = req.user;
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const frontendUrl = getPrimaryFrontendUrl();
     
     // Redirect to frontend with user data in URL params
     res.redirect(`${frontendUrl}/auth/callback?user=${encodeURIComponent(JSON.stringify({

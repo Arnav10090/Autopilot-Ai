@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import { buildApiUrl } from '@/lib/api';
 
 export interface SearchableItem {
   id: string;
@@ -62,9 +63,9 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
         // Fetch projects
         const storedUser = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
         const userId = storedUser ? JSON.parse(storedUser).id : null;
-        const projectsUrl = userId 
-          ? `http://localhost:5000/api/projects?user_id=${userId}`
-          : 'http://localhost:5000/api/projects';
+        const projectsUrl = userId
+          ? buildApiUrl(`/api/projects?user_id=${userId}`)
+          : buildApiUrl('/api/projects');
         
         const projectsRes = await fetch(projectsUrl);
         if (projectsRes.ok) {

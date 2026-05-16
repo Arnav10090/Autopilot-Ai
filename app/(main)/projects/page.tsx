@@ -8,6 +8,7 @@ import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Pill } from '@/components/ui/Pill';
 import { Select } from '@/components/ui/Select';
+import { buildApiUrl } from '@/lib/api';
 
 interface Project {
   id: string;
@@ -47,9 +48,9 @@ export default function ProjectsPage() {
         const storedUser = localStorage.getItem('user');
         const userId = storedUser ? JSON.parse(storedUser).id : null;
         
-        const url = userId 
-          ? `http://localhost:5000/api/projects?user_id=${userId}`
-          : 'http://localhost:5000/api/projects';
+        const url = userId
+          ? buildApiUrl(`/api/projects?user_id=${userId}`)
+          : buildApiUrl('/api/projects');
         
         const res = await fetch(url);
         if (!res.ok) throw new Error('Failed to fetch');

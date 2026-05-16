@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card, CardHeader, CardBody, CardFooter } from '@/components/ui/Card';
 import { ThemeToggle } from '@/components/global/ThemeToggle';
+import { buildApiUrl } from '@/lib/api';
 
 export default function SignInPage() {
   const [email, setEmail] = useState('');
@@ -21,7 +22,7 @@ export default function SignInPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch(buildApiUrl('/api/auth/login'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -121,7 +122,7 @@ export default function SignInPage() {
                 variant="outline" 
                 disabled={isLoading}
                 onClick={() => {
-                  window.location.href = 'http://localhost:5000/api/auth/google';
+                  window.location.href = buildApiUrl('/api/auth/google');
                 }}
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -136,7 +137,7 @@ export default function SignInPage() {
                 variant="outline" 
                 disabled={isLoading}
                 onClick={() => {
-                  window.location.href = 'http://localhost:5000/api/auth/github';
+                  window.location.href = buildApiUrl('/api/auth/github');
                 }}
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">

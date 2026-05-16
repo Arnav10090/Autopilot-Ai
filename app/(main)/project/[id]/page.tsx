@@ -15,6 +15,7 @@ import { Spinner } from '@/components/ui/Spinner';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { exportProject } from '@/services/exportHandler';
+import { buildApiUrl } from '@/lib/api';
 
 export default function ProjectDetailPage() {
   const params = useParams();
@@ -30,7 +31,7 @@ export default function ProjectDetailPage() {
     async function fetchProject() {
       try {
         setLoading(true);
-        const response = await fetch(`http://127.0.0.1:5000/api/projects/${projectId}`);
+        const response = await fetch(buildApiUrl(`/api/projects/${projectId}`));
 
         if (!response.ok) {
           throw new Error('Failed to fetch project');

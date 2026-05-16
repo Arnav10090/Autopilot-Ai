@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
+import { buildApiUrl } from '@/lib/api';
 
 // Types
 interface ChatMessage {
@@ -36,7 +37,7 @@ const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
 // API functions
 async function sendChatMessage(message: string, sessionId: string, context: AppContext, userId?: string) {
-  const response = await fetch('http://localhost:5000/api/chat', {
+  const response = await fetch(buildApiUrl('/api/chat'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ message, sessionId, context, userId }),
@@ -60,7 +61,7 @@ async function sendChatMessageStream(
   onError: (error: string, retryable: boolean) => void
 ) {
   try {
-    const response = await fetch('http://localhost:5000/api/chat/stream', {
+    const response = await fetch(buildApiUrl('/api/chat/stream'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message, sessionId, context, userId }),
@@ -105,7 +106,7 @@ async function sendChatMessageStream(
 }
 
 async function submitChatFeedback(responseId: string, rating: 'up' | 'down', comment?: string) {
-  await fetch('http://localhost:5000/api/chat/feedback', {
+  await fetch(buildApiUrl('/api/chat/feedback'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ responseId, rating, comment }),
