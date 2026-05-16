@@ -1,3 +1,4 @@
+# render.yaml (at repo root)
 services:
   - type: web
     name: autopilot-ai-backend
