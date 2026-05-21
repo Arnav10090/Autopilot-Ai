@@ -412,7 +412,7 @@ export default function ProjectForm() {
           </div>
 
           {/* Step indicators */}
-          <div className="grid grid-cols-5 gap-2">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
             {STEPS.map((step, index) => (
               <button
                 key={step.id}
@@ -422,7 +422,7 @@ export default function ProjectForm() {
                     setCurrentStep(step.id);
                   }
                 }}
-                className={`p-3 rounded-lg text-center font-medium transition-all text-sm ${
+                className={`min-h-[88px] rounded-lg p-3 text-center text-sm font-medium transition-all ${
                   step.id === currentStep
                     ? 'bg-neutral-900 dark:bg-accent text-white shadow-md'
                     : isStepValid(step.id)
@@ -645,7 +645,7 @@ export default function ProjectForm() {
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div className="pb-4 border-b border-neutral-200 dark:border-neutral-800">
                     <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">Team Size</p>
                     <p className="font-medium text-neutral-900 dark:text-neutral-50">

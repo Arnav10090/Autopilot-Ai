@@ -366,8 +366,9 @@ export default function ProjectsPage() {
             ))}
           </div>
         ) : (
-          <Card>
-            <table className="w-full">
+          <Card className="overflow-hidden">
+            <div className="overflow-x-auto">
+            <table className="min-w-[48rem] w-full">
               <thead>
                 <tr className="border-b border-neutral-200 dark:border-neutral-800">
                   <th className="text-center p-4">
@@ -452,6 +453,7 @@ export default function ProjectsPage() {
                 ))}
               </tbody>
             </table>
+            </div>
 
             {/* Pagination Controls */}
             {totalPages > 1 && (

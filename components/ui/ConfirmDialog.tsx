@@ -29,7 +29,7 @@ export function ConfirmDialog({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-end justify-center p-4 animate-fade-in sm:items-center">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/85 backdrop-blur-xl"
@@ -37,9 +37,9 @@ export function ConfirmDialog({
       />
 
       {/* Dialog */}
-      <div className="relative bg-surface dark:bg-surface-dark rounded-2xl shadow-2xl border border-neutral-200 dark:border-neutral-800 max-w-md w-full animate-scale-in">
+      <div className="relative w-[90%] max-w-lg animate-scale-in rounded-2xl border border-neutral-200 bg-surface shadow-2xl dark:border-neutral-800 dark:bg-surface-dark">
         {/* Header */}
-        <div className="px-6 pt-6 pb-4">
+        <div className="px-4 pb-4 pt-5 sm:px-6 sm:pt-6">
           <div className="flex items-start gap-4">
             {/* Icon */}
             <div className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center ${
@@ -68,7 +68,7 @@ export function ConfirmDialog({
             {/* Close button */}
             <button
               onClick={onClose}
-              className="flex-shrink-0 w-8 h-8 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center transition-colors"
+              className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800"
             >
               <svg className="w-5 h-5 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -78,18 +78,19 @@ export function ConfirmDialog({
         </div>
 
         {/* Message */}
-        <div className="px-6 pb-6">
+        <div className="px-4 pb-5 sm:px-6 sm:pb-6">
           <div className="text-neutral-600 dark:text-neutral-400">
             {message}
           </div>
         </div>
 
         {/* Actions */}
-        <div className="px-6 pb-6 flex gap-3 justify-end">
+        <div className="flex flex-col-reverse gap-3 px-4 pb-5 sm:flex-row sm:justify-end sm:px-6 sm:pb-6">
           <Button
             variant="outline"
             onClick={onClose}
             disabled={isLoading}
+            className="min-h-[44px] w-full sm:w-auto"
           >
             {cancelText}
           </Button>
@@ -97,6 +98,7 @@ export function ConfirmDialog({
             variant={variant === 'danger' ? 'danger' : 'primary'}
             onClick={onConfirm}
             isLoading={isLoading}
+            className="min-h-[44px] w-full sm:w-auto"
           >
             {confirmText}
           </Button>

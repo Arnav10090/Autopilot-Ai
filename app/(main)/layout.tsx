@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ChatProvider } from "@/contexts/ChatContext";
+import { SidebarProvider, useSidebar } from "@/contexts/SidebarContext";
 
 export default function MainLayout({
   children,
@@ -38,7 +39,7 @@ export default function MainLayout({
         <SidebarProvider>
           <SkipLinks />
           <Header />
-          <div className="flex min-h-screen">
+          <div className="min-h-[calc(100vh-4rem)] overflow-x-clip bg-bg dark:bg-bg-dark">
             <SideNav />
             <MainContentWrapper>
               {children}
@@ -52,18 +53,17 @@ export default function MainLayout({
   );
 }
 
-// Separate component to use the context
-import { SidebarProvider, useSidebar } from "@/contexts/SidebarContext";
-
 function MainContentWrapper({ children }: { children: React.ReactNode }) {
   const { isCollapsed } = useSidebar();
   
   return (
     <main 
       id="main-content" 
-      className={`flex-1 transition-all duration-300 ${isCollapsed ? 'lg:ml-20' : 'lg:ml-64'}`}
+      className={`min-w-0 transition-[margin] duration-300 ${isCollapsed ? 'lg:ml-20' : 'lg:ml-64'}`}
     >
-      {children}
+      <div className="w-full max-w-full overflow-x-hidden px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+        {children}
+      </div>
     </main>
   );
 }

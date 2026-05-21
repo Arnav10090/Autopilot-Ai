@@ -27,6 +27,7 @@ export function ChatWidget() {
 
   const [input, setInput] = useState('');
   const [feedbackGiven, setFeedbackGiven] = useState<Set<string>>(new Set());
+  const [isMobile, setIsMobile] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -94,6 +95,16 @@ export function ChatWidget() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  useEffect(() => {
+    const updateViewport = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    updateViewport();
+    window.addEventListener('resize', updateViewport);
+    return () => window.removeEventListener('resize', updateViewport);
+  }, []);
 
   // Focus input when opened
   useEffect(() => {
@@ -191,7 +202,7 @@ export function ChatWidget() {
     <button
       onClick={toggleOpen}
       style={{ right: `${position.x}px`, bottom: `${position.y}px` }}
-      className="fixed z-50 w-14 h-14 rounded-full bg-neutral-900 dark:bg-gradient-to-br dark:from-accent dark:to-accent-2 text-white shadow-lg shadow-neutral-900/30 dark:shadow-accent/20 hover:shadow-xl hover:shadow-neutral-900/40 dark:hover:shadow-accent/30 hover:scale-105 active:scale-95 transition-all duration-200 flex items-center justify-center group ring-4 ring-white/50 dark:ring-neutral-900/50"
+      className="fixed z-50 flex h-12 w-12 items-center justify-center rounded-full bg-neutral-900 text-white shadow-lg shadow-neutral-900/30 ring-4 ring-white/50 transition-all duration-200 hover:scale-105 hover:shadow-xl hover:shadow-neutral-900/40 active:scale-95 dark:bg-gradient-to-br dark:from-accent dark:to-accent-2 dark:ring-neutral-900/50 dark:shadow-accent/20 dark:hover:shadow-accent/30 sm:h-14 sm:w-14"
       aria-label={isOpen ? 'Close chat' : 'Open chat assistant'}
       aria-expanded={isOpen}
     >
@@ -211,17 +222,21 @@ export function ChatWidget() {
   );
 
   // Chat panel positioning
-  const panelClasses = isFullScreen
-    ? 'fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm'
+  const isMobileSheet = isMobile && isOpen;
+
+  const panelClasses = isFullScreen || isMobileSheet
+    ? 'fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-sm md:items-center'
     : 'fixed z-50';
 
-  const panelStyle = isFullScreen
+  const panelStyle = isFullScreen || isMobileSheet
     ? {}
     : { right: `${position.x}px`, bottom: `${position.y + 72}px` };
 
-  const contentClasses = isFullScreen
-    ? 'w-[90vw] max-w-4xl h-[85vh] rounded-2xl'
-    : 'w-96 h-[32rem] rounded-2xl';
+  const contentClasses = isMobileSheet
+    ? 'h-[100dvh] w-full rounded-none md:h-auto md:w-[90vw] md:max-w-4xl md:rounded-2xl'
+    : isFullScreen
+    ? 'h-[85vh] w-[90vw] max-w-4xl rounded-2xl'
+    : 'h-[min(32rem,calc(100dvh-6rem))] w-[calc(100vw-2rem)] max-w-sm rounded-2xl sm:w-96';
 
   if (!isOpen) {
     return <FloatingButton />;
@@ -240,7 +255,7 @@ export function ChatWidget() {
           <div
             onMouseDown={handleDragStart}
             onTouchStart={handleDragStart}
-            className={`flex items-center justify-between px-4 py-3 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50 ${!isFullScreen ? 'cursor-grab active:cursor-grabbing' : ''}`}
+            className={`flex items-center justify-between border-b border-neutral-200 bg-neutral-50 px-4 py-3 dark:border-neutral-800 dark:bg-neutral-800/50 ${!isFullScreen && !isMobile ? 'cursor-grab active:cursor-grabbing' : ''}`}
           >
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-accent to-accent-2 flex items-center justify-center">
@@ -252,22 +267,24 @@ export function ChatWidget() {
               </div>
             </div>
             <div className="flex items-center gap-1">
-              <button
-                onClick={toggleFullScreen}
-                className="p-2 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
-                aria-label={isFullScreen ? 'Exit full screen' : 'Enter full screen'}
-              >
-                <svg className="w-4 h-4 text-neutral-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  {isFullScreen ? (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" />
-                  ) : (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                  )}
-                </svg>
-              </button>
+              {!isMobile && (
+                <button
+                  onClick={toggleFullScreen}
+                  className="rounded-lg p-2 transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                  aria-label={isFullScreen ? 'Exit full screen' : 'Enter full screen'}
+                >
+                  <svg className="h-4 w-4 text-neutral-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    {isFullScreen ? (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" />
+                    ) : (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                    )}
+                  </svg>
+                </button>
+              )}
               <button
                 onClick={clearChat}
-                className="p-2 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
+                className="rounded-lg p-2 transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-700"
                 aria-label="Clear chat"
               >
                 <svg className="w-4 h-4 text-neutral-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -276,7 +293,7 @@ export function ChatWidget() {
               </button>
               <button
                 onClick={toggleOpen}
-                className="p-2 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
+                className="rounded-lg p-2 transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-700"
                 aria-label="Close chat"
               >
                 <svg className="w-4 h-4 text-neutral-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -378,8 +395,8 @@ export function ChatWidget() {
             </div>
           )}
 
-          <div className="p-4 border-t border-neutral-200 dark:border-neutral-800">
-            <div className="flex gap-2">
+          <div className="border-t border-neutral-200 p-4 dark:border-neutral-800">
+            <div className="flex items-end gap-2">
               <textarea
                 ref={inputRef}
                 value={input}
@@ -387,14 +404,14 @@ export function ChatWidget() {
                 onKeyDown={handleKeyDown}
                 placeholder="Ask me anything..."
                 rows={1}
-                className="flex-1 resize-none rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-4 py-2.5 text-sm text-neutral-900 dark:text-neutral-100 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all"
+                className="min-h-[44px] flex-1 resize-none rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-2.5 text-sm text-neutral-900 transition-all placeholder-neutral-500 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100"
                 disabled={isLoading}
                 aria-label="Message input"
               />
               <button
                 onClick={handleSubmit}
                 disabled={!input.trim() || isLoading}
-                className="px-4 py-2.5 bg-accent text-white rounded-xl hover:bg-accent-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl bg-accent px-4 py-2.5 text-white transition-colors hover:bg-accent-2 disabled:cursor-not-allowed disabled:opacity-50"
                 aria-label="Send message"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

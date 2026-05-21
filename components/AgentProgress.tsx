@@ -77,19 +77,19 @@ export default function AgentProgress({ isDataReady = false, onAnimationComplete
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-neutral-900/95 backdrop-blur-sm">
-      <div className="max-w-4xl w-full mx-4">
+      <div className="mx-4 w-full max-w-5xl">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-display font-700 text-white mb-2">
+        <div className="mb-8 text-center sm:mb-12">
+          <h2 className="mb-2 text-2xl font-display font-700 text-white sm:text-3xl">
             AI Agents at Work
           </h2>
-          <p className="text-neutral-400">
+          <p className="text-sm text-neutral-400 sm:text-base">
             {isComplete ? "Analysis complete! Redirecting..." : "Our AI team is analyzing your project..."}
           </p>
         </div>
 
         {/* Agent Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+        <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {agents.map((agent, index) => {
             const isFinalStep = 'isFinalStep' in agent && agent.isFinalStep;
             const isCompleted = isFinalStep 
@@ -101,7 +101,7 @@ export default function AgentProgress({ isDataReady = false, onAnimationComplete
             return (
               <div
                 key={agent.name}
-                className={`relative p-4 rounded-2xl border-2 transition-all duration-500 min-w-[180px] ${
+                className={`relative rounded-2xl border-2 p-4 transition-all duration-500 ${
                   isActive
                     ? 'border-white bg-white/10 scale-105 shadow-2xl shadow-white/10'
                     : isCompleted

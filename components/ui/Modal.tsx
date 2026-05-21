@@ -121,13 +121,13 @@ export function Modal({
 
   const sizeClasses = {
     sm: 'max-w-sm',
-    md: 'max-w-md',
-    lg: 'max-w-lg',
-    xl: 'max-w-xl',
+    md: 'max-w-lg',
+    lg: 'max-w-2xl',
+    xl: 'max-w-4xl',
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-end justify-center p-4 sm:items-center">
       {/* Overlay */}
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
@@ -142,18 +142,18 @@ export function Modal({
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? 'modal-title' : undefined}
-        className={`relative bg-surface dark:bg-surface-dark rounded-2xl shadow-2xl ${sizeClasses[size]} w-full animate-fade-in`}
+        className={`relative w-[90%] overflow-hidden rounded-2xl bg-surface shadow-2xl animate-fade-in sm:w-full ${sizeClasses[size]} max-h-[calc(100dvh-2rem)] dark:bg-surface-dark`}
       >
         {/* Header */}
         {(title || closeButton) && (
-          <div className="flex items-center justify-between p-6 border-b border-neutral-200 dark:border-neutral-800">
-            {title && <h2 id="modal-title" className="font-display font-700 text-lg text-neutral-900 dark:text-neutral-50">{title}</h2>}
+          <div className="flex items-center justify-between border-b border-neutral-200 p-4 sm:p-6 dark:border-neutral-800">
+            {title && <h2 id="modal-title" className="font-display text-base font-700 text-neutral-900 sm:text-lg dark:text-neutral-50">{title}</h2>}
             {!title && <div />}
             {closeButton && (
               <button
                 onClick={onClose}
                 aria-label="Close"
-                className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-accent"
+                className="min-h-[44px] min-w-[44px] rounded-lg p-1 transition-colors hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-accent dark:hover:bg-neutral-800"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -164,11 +164,11 @@ export function Modal({
         )}
 
         {/* Content */}
-        <div className="p-6">{children}</div>
+        <div className="max-h-[calc(100dvh-9rem)] overflow-y-auto p-4 sm:p-6">{children}</div>
 
         {/* Footer */}
         {footer && (
-          <div className="p-6 border-t border-neutral-200 dark:border-neutral-800">
+          <div className="border-t border-neutral-200 p-4 sm:p-6 dark:border-neutral-800">
             {footer}
           </div>
         )}

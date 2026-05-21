@@ -79,18 +79,18 @@ export function ExportModal({
       title="Export Project Analysis"
       size="lg"
       footer={
-        <div className="flex justify-between items-center w-full">
+        <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className='text-sm text-neutral-500'>
                 {Object.values(selectedOptions).filter(Boolean).length - 1} sections selected
             </div>
-            <div className="flex gap-3">
-            <Button variant="outline" onClick={onClose} disabled={isExporting}>
+            <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+            <Button variant="outline" onClick={onClose} disabled={isExporting} className="min-h-[44px] w-full sm:w-auto">
                 Cancel
             </Button>
             <Button 
                 onClick={handleExport} 
                 disabled={isExporting || !selectedFormat}
-                className="bg-gradient-to-r from-accent to-accent/80 hover:from-accent/90 hover:to-accent/70 text-white shadow-lg shadow-accent/20 transition-all duration-300"
+                className="min-h-[44px] w-full bg-gradient-to-r from-accent to-accent/80 text-white shadow-lg shadow-accent/20 transition-all duration-300 hover:from-accent/90 hover:to-accent/70 sm:w-auto"
             >
                 {isExporting ? (
                 <>
@@ -110,7 +110,7 @@ export function ExportModal({
         </div>
       }
     >
-      <div className="space-y-8 py-2">
+        <div className="space-y-8 py-2">
         {/* Format Selection */}
         <div className="space-y-4">
           <h3 className="text-sm font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 ml-1">
@@ -153,7 +153,7 @@ export function ExportModal({
 
         {/* Content Selection */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between ml-1">
+          <div className="ml-1 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
               Include Sections
             </h3>
@@ -232,15 +232,15 @@ export function ExportModal({
         </div>
 
         {/* File Preview */}
-        <div className="flex items-center justify-between p-4 bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-100 dark:border-neutral-800 rounded-xl">
-            <div className="flex items-center gap-3">
+        <div className="flex flex-col gap-4 rounded-xl border border-neutral-100 bg-neutral-50 p-4 dark:border-neutral-800 dark:bg-neutral-800/50 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex min-w-0 items-center gap-3">
                 <div className="p-2 bg-white dark:bg-neutral-800 rounded-lg shadow-sm">
                     <span className="text-xl">
                         {exportFormats.find(f => f.id === selectedFormat)?.icon}
                     </span>
                 </div>
-                <div>
-                    <p className="text-sm font-medium text-neutral-900 dark:text-neutral-200">
+                <div className="min-w-0">
+                    <p className="truncate text-sm font-medium text-neutral-900 dark:text-neutral-200">
                         {projectTitle.replace(/\s+/g, '-').toLowerCase()}.{selectedFormat}
                     </p>
                     <p className="text-xs text-neutral-500">
@@ -253,7 +253,7 @@ export function ExportModal({
                 variant="ghost" 
                 onClick={handleExport}
                 disabled={isExporting}
-                className="text-accent hover:text-accent-2 hover:bg-accent/5"
+                className="min-h-[44px] w-full text-accent hover:bg-accent/5 hover:text-accent-2 sm:w-auto"
             >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
