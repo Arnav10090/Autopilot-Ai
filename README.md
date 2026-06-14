@@ -1215,6 +1215,34 @@ We are committed to providing a welcoming and inclusive environment. Please:
 
 ---
 
+## 🔄 Keeping Render Awake
+
+This application uses an **external uptime monitor** to periodically ping:
+
+```
+GET /api/health
+```
+
+to reduce cold starts on the Render free tier.
+
+Render's free tier spins down inactive services after ~15 minutes of inactivity. Because internal cron jobs stop executing when the service is sleeping, this project relies on an **external** scheduler (cron-job.org or UptimeRobot) that pings the backend every 10 minutes from outside the Render VM — keeping the process warm without any in-process timer.
+
+**Health endpoint response:**
+```json
+{
+  "status": "ok",
+  "timestamp": "2026-06-14T12:00:00.000Z"
+}
+```
+
+- ⚡ No database access
+- 🔓 No authentication required
+- 📦 < 5 ms response time
+
+For full setup instructions (cron-job.org, UptimeRobot, environment variables, troubleshooting), see **[KEEP_ALIVE_SETUP.md](./KEEP_ALIVE_SETUP.md)**.
+
+---
+
 ## 📄 License
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
